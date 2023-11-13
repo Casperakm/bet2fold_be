@@ -39,7 +39,6 @@ export class CustomerEntity extends BaseEntity {
   balances?: number;
 
 
-
   // @ManyToOne(
   //   type => WardEntity,
   //   Ward => Ward.id,
