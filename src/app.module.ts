@@ -5,7 +5,21 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CustomerModule } from './customer/customer.module';
 import { SharedModule } from './shared/shared.module';
-
+import { SocketModule } from './socket/socket.module';
+import { CacheModule, CacheModuleAsyncOptions } from '@nestjs/cache-manager';
+import { redisStore } from 'cache-manager-redis-store';
+export const RedisOptions: CacheModuleAsyncOptions = {
+  isGlobal: true,
+  useFactory: async () => {
+    const store = await redisStore({
+      url: process.env.REDIS_URL,
+    });
+    return {
+      store: () => store,
+      ttl: 86400000, // 1 day (remove this if you dont want to clear cache automatically)
+    };
+  },
+};
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -23,10 +37,13 @@ import { SharedModule } from './shared/shared.module';
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         autoLoadEntities: true,
         synchronize: true,
+        ssl: true
       }),
     }),
     SharedModule,
-    CustomerModule
+    CustomerModule,
+    SocketModule,
+    // CacheModule.registerAsync(RedisOptions)
   ],
   controllers: [AppController],
   providers: [AppService],

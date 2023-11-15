@@ -5,6 +5,7 @@ import {
 } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { WsAdapter } from '@nestjs/platform-ws';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -13,6 +14,7 @@ async function bootstrap() {
   );
   app.enableCors();
   app.setGlobalPrefix('api');
+  app.useWebSocketAdapter(new WsAdapter(app))
   const options = new DocumentBuilder()
     .setTitle(' API Documentation')
     .setDescription(' API Documention')
