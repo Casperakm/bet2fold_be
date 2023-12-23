@@ -13,8 +13,8 @@ export class UpdateCustomerDto {
   @IsEnum(UserRole)
   role: UserRole;
 
-  @ApiProperty()
-  @IsNotEmpty()
+  @ApiPropertyOptional()
+  @ValidateIf(({ email }) => email)
   @IsEmail()
   email: string;
 
@@ -22,10 +22,11 @@ export class UpdateCustomerDto {
   @IsNotEmpty()
   password: string;
 
-  @ApiPropertyOptional()
-  phone?: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  phone: string;
 
-  @ApiPropertyOptional()
+  @ApiProperty()
   avatar_url?: string;
 
   @ApiPropertyOptional()

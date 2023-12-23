@@ -1,6 +1,7 @@
 import { Entity, Column, BeforeInsert, OneToMany, OneToOne, ManyToOne, JoinColumn } from 'typeorm';
 import { UserRole } from './customer.enum';
 import { BaseEntity } from '../../shared/base-model/base-entity';
+import { MoneyTransactionEntity } from 'src/transaction/model/transaction.entity';
 
 @Entity('customer')
 export class CustomerEntity extends BaseEntity {
@@ -16,18 +17,17 @@ export class CustomerEntity extends BaseEntity {
   @Column({ unique: true })
   refer_code: string
 
-  @Column({ unique: true, nullable: true })
+  @Column({ nullable: true })
   email: string;
 
   @Column({ nullable: true })
   password: string;
 
-  @Column({ nullable: true })
-  phone?: string;
+  @Column({ unique: true })
+  phone: string;
 
   @Column({ nullable: true })
   avatar_url: string;
-
 
   @Column({ nullable: true })
   nrc: string;
@@ -38,7 +38,8 @@ export class CustomerEntity extends BaseEntity {
   @Column({ nullable: true })
   balances?: number;
 
-
+  @OneToMany(() => MoneyTransactionEntity, (transaction) => transaction.bank)
+  transactions: MoneyTransactionEntity[]
   // @ManyToOne(
   //   type => WardEntity,
   //   Ward => Ward.id,

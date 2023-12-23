@@ -8,6 +8,7 @@ import { SharedModule } from './shared/shared.module';
 import { SocketModule } from './socket/socket.module';
 import { CacheModule, CacheModuleAsyncOptions } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-store';
+import { LocalBankModule } from './local-bank/local-bank.module';
 export const RedisOptions: CacheModuleAsyncOptions = {
   isGlobal: true,
   useFactory: async () => {
@@ -43,6 +44,7 @@ export const RedisOptions: CacheModuleAsyncOptions = {
     SharedModule,
     CustomerModule,
     SocketModule,
+    LocalBankModule
     // CacheModule.registerAsync(RedisOptions)
   ],
   controllers: [AppController],
