@@ -2,6 +2,7 @@ import { Entity, Column, BeforeInsert, OneToMany, OneToOne, ManyToOne, JoinColum
 import { UserRole } from './customer.enum';
 import { BaseEntity } from '../../shared/base-model/base-entity';
 import { MoneyTransactionEntity } from 'src/transaction/model/transaction.entity';
+import { FileStroageEntity } from 'src/file-storage/model/file-storage.entity';
 
 @Entity('customer')
 export class CustomerEntity extends BaseEntity {
@@ -40,6 +41,10 @@ export class CustomerEntity extends BaseEntity {
 
   @OneToMany(() => MoneyTransactionEntity, (transaction) => transaction.bank)
   transactions: MoneyTransactionEntity[]
+
+  @OneToMany(() => FileStroageEntity, (fileStroageEntity) => fileStroageEntity.user)
+  files: FileStroageEntity[]
+
   // @ManyToOne(
   //   type => WardEntity,
   //   Ward => Ward.id,
@@ -60,5 +65,6 @@ export class CustomerEntity extends BaseEntity {
   emailToLowerCase() {
     this.email = this.email.toLowerCase();
   }
+
 
 }
