@@ -153,8 +153,45 @@ export class CustomerService {
 
 
   async updateInfo(id, data) {
-    await this.customerRepo.update(id, data);
-    return { success: 'updated!' };
+    return from(this.customerRepo.findOne({ where: { id } })).pipe(
+      mergeMap((customer: CustomerEntity) => {
+        return this.findByCustomerEmail(data['email']).pipe(mergeMap((exitCustomer) => {
+          if (customer) {
+            if (!exitCustomer || exitCustomer?.id != id) {
+              const newCust = customer;
+              newCust.uuid = crypto.randomBytes(16).toString("hex");
+              newCust.refer_code = crypto.randomBytes(5).toString("hex");
+              newCust.email = data['email'];
+              newCust.username = data['username'];
+              newCust.role = data['role'];
+              newCust.phone = data['phone'];
+              newCust.avatar_url = data['avatar_url'];
+              newCust.nrc = data['nrc'];
+              return from(this.authService.hashPasswordRun(data.password)).pipe(mergeMap((password) => {
+                newCust.password = password;
+                return from(this.customerRepo.save(newCust)).pipe(
+                  mergeMap((customer: CustomerEntity) => {
+                    const payload = { username: customer.username, id: customer.id, role: UserRole.CUSTOMER };
+                    return this.authService
+                      .generateJWT(payload)
+                      .pipe(map((jwt: string) => {
+                        let user = customer as Customer
+                        user.token = jwt
+                        return user;
+                      }));
+                  }),
+                );
+              }))
+
+            } else {
+              throw new BadRequestException('User Email Is Alreay Exist!');
+            }
+          } else {
+            throw new BadRequestException('User Email Is Alreay Exist!');
+          }
+        }))
+      })
+    )
   }
 
 
@@ -163,6 +200,7 @@ export class CustomerService {
       where: { email },
     })
   }
+
   findByCustomerEmail(email: string): Observable<CustomerEntity> {
     return from(this.customerRepo.findOne({ where: { email } })).pipe(
       map((customer: CustomerEntity) => {

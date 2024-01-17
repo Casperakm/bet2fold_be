@@ -1,16 +1,16 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { ProductTypeService } from './transaction.service';
+import { TransactionService } from './transaction.service';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiOkResponse, ApiParam, ApiQuery, ApiResponseProperty, ApiTags } from '@nestjs/swagger';
 import { CreateTransactionDto } from './model/transaction.dto';
 import { MoneyTransactionEntity } from './model/transaction.entity';
 import { SuccessAPI } from '../shared/util/success-api';
 import { UserData } from 'src/shared/decorators/users.decorator';
 
-@Controller('/product-type')
-@ApiTags('Product-Type')
-export class ProductTypeController {
+@Controller('/transaction')
+@ApiTags('Transaction')
+export class TransactionController {
     constructor(
-        private readonly _productType: ProductTypeService
+        private readonly _productType: TransactionService
     ) { }
 
     @Post('')

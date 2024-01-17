@@ -7,7 +7,7 @@ import { CreateTransactionDto } from './model/transaction.dto';
 import { SuccessAPI } from 'src/shared/util/success-api';
 
 @Injectable()
-export class ProductTypeService {
+export class TransactionService {
   constructor(
     @InjectRepository(MoneyTransactionEntity)
     private readonly typeRepository: Repository<MoneyTransactionEntity>,
