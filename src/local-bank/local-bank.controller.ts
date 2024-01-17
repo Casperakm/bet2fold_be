@@ -5,6 +5,7 @@ import { CreateBankDto } from './model/local-bank.dto';
 import { LocalBankEntity } from './model/local-bank.entity';
 import { SuccessAPI } from '../shared/util/success-api';
 import { UserData } from 'src/shared/decorators/users.decorator';
+import { JwtAuthGuard } from 'src/shared/auth/guard/jwt-auth.guard';
 
 @Controller('/local-bank')
 @ApiTags('APP Bank')
@@ -16,6 +17,7 @@ export class LocalBankController {
     @Post('')
     @ApiOkResponse({ type: Object })
     @ApiBadRequestResponse()
+    @UseGuards(JwtAuthGuard)
     CreateProductType(
         @Body() data: CreateBankDto,
         @UserData('id') customer_id: number

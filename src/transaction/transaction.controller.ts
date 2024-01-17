@@ -5,9 +5,11 @@ import { CreateTransactionDto } from './model/transaction.dto';
 import { MoneyTransactionEntity } from './model/transaction.entity';
 import { SuccessAPI } from '../shared/util/success-api';
 import { UserData } from 'src/shared/decorators/users.decorator';
+import { JwtAuthGuard } from 'src/shared/auth/guard/jwt-auth.guard';
 
 @Controller('/transaction')
 @ApiTags('Transaction')
+@UseGuards(JwtAuthGuard)
 export class TransactionController {
     constructor(
         private readonly _productType: TransactionService
